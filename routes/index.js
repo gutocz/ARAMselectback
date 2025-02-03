@@ -7,7 +7,9 @@ const WebSocket = require("ws");
 const lolChamps = "https://ddragon.leagueoflegends.com/cdn/14.24.1/data/pt_BR/champion.json";
 const imgBaseUrl = "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/";
 
-const wss = new WebSocket.Server({ port: 8080 });
+const WS_PORT = process.env.WS_PORT || 8080;
+
+const wss = new WebSocket.Server({ port: WS_PORT });
 
 // Lista para armazenar os campeões sorteados
 let sortedChampionsList = [];
