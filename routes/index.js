@@ -11,6 +11,8 @@ const WS_PORT = process.env.WS_PORT || 8080;
 
 const wss = new WebSocket.Server({ port: WS_PORT });
 
+// Texto para commit da nova branch
+
 // Lista para armazenar os campeões sorteados
 let sortedChampionsList = [];
 
