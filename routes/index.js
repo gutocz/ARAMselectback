@@ -38,6 +38,15 @@ module.exports = (broadcastSortedChampions, sortedChampionsList, allSortedChampi
         return player;
     }
 
+    // Endpoint de ping para manter o servidor ativo no Render
+    router.get('/ping', (req, res) => {
+        res.status(200).json({ 
+            status: 'ok', 
+            message: 'Servidor ativo',
+            timestamp: new Date().toISOString()
+        });
+    });
+
     router.get('/team', async (req, res) => {
         try {
             const team = await createTeam();

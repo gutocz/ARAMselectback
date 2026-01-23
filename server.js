@@ -4,6 +4,7 @@ const express = require('express');
 const cors = require('cors');
 const http = require('http');
 const WebSocket = require('ws');
+const { startKeepAlive } = require('./utils/keepAlive');
 
 const app = express();
 app.use(cors());
@@ -42,4 +43,15 @@ const indexRoutes = require('./routes/index')(broadcastSortedChampions, sortedCh
 app.use('/', indexRoutes);
 
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
+server.listen(PORT, () => {
+    console.log(`Servidor rodando na porta ${PORT}`);
+    
+    // Inicia o serviço de keep-alive apenas em produção (Render)
+    if (process.env.NODE_ENV === 'production' && process.env.RENDER_EXTERNAL_URL) {
+        const serverUrl = process.env.RENDER_EXTERNAL_URL;
+        startKeepAlive(serverUrl, 14); // Ping a cada 14 minutos
+    } else if (process.env.KEEP_ALIVE_URL) {
+        // Permite configurar manualmente a URL para keep-alive
+        startKeepAlive(process.env.KEEP_ALIVE_URL, 14);
+    }
+});
