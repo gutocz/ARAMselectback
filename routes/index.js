@@ -24,9 +24,10 @@ module.exports = (broadcastSortedChampions, sortedChampionsList, allSortedChampi
     async function rollChampion(player) {
         if (player.rolls <= 0) return player;
 
+        const championNames = await getChampionNames();
         let newChampion;
         do {
-            newChampion = (await getChampionNames())[Math.floor(Math.random() * 163)];
+            newChampion = championNames[Math.floor(Math.random() * championNames.length)];
         } while (newChampion === player.champion || allSortedChampionsList.includes(newChampion));
 
         sortedChampionsList.push({ name: player.champion, image: getChampionImage(player.champion) });
@@ -61,8 +62,9 @@ module.exports = (broadcastSortedChampions, sortedChampionsList, allSortedChampi
     });
 
     router.post('/resetSortedChampions', (req, res) => {
-        sortedChampionsList = [];
-        allSortedChampionsList = [];
+        sortedChampionsList.length = 0;
+        allSortedChampionsList.length = 0;
+        broadcastSortedChampions(); // Notifica todos os clientes via WebSocket
         res.status(200).send("Lista de campeões sorteados resetada.");
     });
 

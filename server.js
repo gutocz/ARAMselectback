@@ -19,8 +19,12 @@ let allSortedChampionsList = [];
 
 // WebSocket: Enviar lista ao conectar
 wss.on("connection", (ws) => {
-    sortedChampionsList.length = 0;
+    // Envia a lista atual ao conectar (não limpa a lista)
     ws.send(JSON.stringify({ sortedChampionsList }));
+    
+    ws.on('error', (error) => {
+        console.error('Erro no WebSocket:', error);
+    });
 });
 
 // Função para enviar atualização a todos os clientes
